@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Administração - Sistema de Chamada SUS{% endblock %}
+
+{% block content %}
+<div class="container">
+    <header class="page-header">
+        <h1>Painel Administrativo</h1>
+    </header>
+
+    <section class="admin-dashboard">
+        <div class="stats-grid">
+            <article class="stat-card">
+                <h3>Salas Ativas</h3>
+                <div class="stat-value">{{ rooms|selectattr('is_active')|list|length }}</div>
+                <a href="{{ url_for('admin.rooms') }}">Gerenciar Salas</a>
+            </article>
+
+            <article class="stat-card">
+                <h3>Total de Salas</h3>
+                <div class="stat-value">{{ rooms|length }}</div>
+            </article>
+
+            <article class="stat-card">
+                <h3>Pacientes Cadastrados</h3>
+                <div class="stat-value">{{ patients_count }}</div>
+            </article>
+        </div>
+
+        <div class="admin-actions">
+            <h2>Ações Rápidas</h2>
+            <div class="action-grid">
+                <a href="{{ url_for('admin.rooms') }}" class="action-card">
+                    <span class="icon">🏥</span>
+                    <span class="label">Gerenciar Salas</span>
+                </a>
+                <a href="{{ url_for('admin.reports') }}" class="action-card">
+                    <span class="icon">📊</span>
+                    <span class="label">Relatórios</span>
+                </a>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

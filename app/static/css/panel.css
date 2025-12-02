@@ -1,0 +1,252 @@
+/* Panel Display Styles */
+
+.panel-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, var(--primary-color), #1e40af);
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: var(--border-radius);
+}
+
+.panel-header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.sector-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+}
+
+/* Current Call Section */
+.current-call {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+    text-align: center;
+    padding: 3rem 2rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 40px rgba(34, 197, 94, 0.3);
+}
+
+.call-label {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+}
+
+.current-call .ticket-number {
+    font-size: 6rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.current-call .patient-name {
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+/* Animation for new call */
+.current-call.calling {
+    animation: pulse 1s ease-in-out 3;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+/* Last Calls History */
+.last-calls {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+}
+
+.last-calls h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
+    color: var(--secondary-color);
+}
+
+.last-calls .history-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.last-calls .history-item {
+    background: var(--light-bg);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    border: none;
+}
+
+.last-calls .history-item .ticket {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.last-calls .history-item .name {
+    color: var(--dark-text);
+}
+
+.last-calls .history-item .time {
+    font-size: 0.875rem;
+    color: var(--secondary-color);
+}
+
+/* Queue Info */
+.queue-info {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+}
+
+.queue-count {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.queue-count .label {
+    font-size: 1rem;
+    color: var(--secondary-color);
+}
+
+.queue-count .count {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.next-patients {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.next-patient {
+    background: var(--light-bg);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+}
+
+.next-patient .ticket {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Audio Controls */
+.audio-controls {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+}
+
+.btn-audio {
+    background: var(--secondary-color);
+    color: white;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    box-shadow: var(--shadow);
+}
+
+.btn-audio.enabled {
+    background: var(--success-color);
+}
+
+/* Priority Indicators */
+.priority-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.priority-indicator.IDOSO_80 { background: #dc2626; }
+.priority-indicator.AUTISTA { background: #ea580c; }
+.priority-indicator.DEFICIENTE { background: #f59e0b; }
+.priority-indicator.IDOSO_60 { background: #facc15; }
+.priority-indicator.GESTANTE { background: #84cc16; }
+.priority-indicator.LACTANTE { background: #22c55e; }
+.priority-indicator.CRIANCA { background: #06b6d4; }
+.priority-indicator.NORMAL { background: #94a3b8; }
+
+/* Full Screen Mode */
+.panel-container.fullscreen {
+    max-width: none;
+    padding: 3rem;
+}
+
+.panel-container.fullscreen .current-call .ticket-number {
+    font-size: 10rem;
+}
+
+.panel-container.fullscreen .current-call .patient-name {
+    font-size: 3rem;
+}
+
+/* Responsive Panel */
+@media (max-width: 768px) {
+    .panel-container {
+        padding: 1rem;
+    }
+    
+    .current-call .ticket-number {
+        font-size: 4rem;
+    }
+    
+    .current-call .patient-name {
+        font-size: 1.5rem;
+    }
+    
+    .last-calls .history-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Dark mode support for panels in waiting areas */
+@media (prefers-color-scheme: dark) {
+    .panel-container {
+        background: #1e293b;
+    }
+    
+    .last-calls,
+    .queue-info {
+        background: #334155;
+        color: white;
+    }
+    
+    .last-calls .history-item {
+        background: #475569;
+    }
+    
+    .last-calls .history-item .name {
+        color: white;
+    }
+}

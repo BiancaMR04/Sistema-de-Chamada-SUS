@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Operador - Sistema de Chamada SUS{% endblock %}
+
+{% block content %}
+<div class="container">
+    <header class="page-header">
+        <h1>Painel do Operador</h1>
+        <p>Gerencie as chamadas de pacientes</p>
+    </header>
+
+    <section class="room-selector" aria-label="Seleção de sala">
+        <div class="form-group">
+            <label for="operator-room">Selecione a Sala:</label>
+            <select id="operator-room" name="room_id">
+                <option value="">Selecione uma sala</option>
+                {% for room in rooms %}
+                <option value="{{ room.id }}" {% if selected_room and selected_room.id == room.id %}selected{% endif %}>
+                    {{ room.name }} ({{ room.sector }})
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </section>
+
+    <div id="operator-content" class="operator-content" {% if not selected_room %}hidden{% endif %}>
+        <section class="current-patient" aria-label="Paciente atual">
+            <h2>Paciente Atual</h2>
+            <div id="current-patient-info" class="patient-card">
+                <div class="ticket" id="op-current-ticket">---</div>
+                <div class="name" id="op-current-name">Nenhum paciente chamado</div>
+                <div class="priority" id="op-current-priority"></div>
+                <div class="call-count" id="op-call-count"></div>
+            </div>
+            <div class="action-buttons">
+                <button id="btn-recall" class="btn btn-warning" disabled>
+                    🔔 Chamar Novamente
+                </button>
+                <button id="btn-attended" class="btn btn-success" disabled>
+                    ✓ Atendido
+                </button>
+                <button id="btn-absent" class="btn btn-danger" disabled>
+                    ✗ Ausente
+                </button>
+            </div>
+        </section>
+
+        <section class="call-next" aria-label="Chamar próximo">
+            <button id="btn-call-next" class="btn btn-primary btn-large">
+                📢 Chamar Próximo
+            </button>
+        </section>
+
+        <section class="queue-list" aria-label="Fila de espera">
+            <h2>Fila de Espera</h2>
+            <div class="queue-summary">
+                <span>Total aguardando: <strong id="queue-total">0</strong></span>
+            </div>
+            <table class="queue-table" id="queue-table" aria-label="Lista de pacientes na fila">
+                <thead>
+                    <tr>
+                        <th scope="col">Posição</th>
+                        <th scope="col">Senha</th>
+                        <th scope="col">Paciente</th>
+                        <th scope="col">Prioridade</th>
+                        <th scope="col">Horário</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="queue-body">
+                    <tr>
+                        <td colspan="6" class="empty-queue">Nenhum paciente na fila</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="history-section" aria-label="Histórico de chamadas">
+            <h2>Últimas Chamadas</h2>
+            <ul id="op-history" class="history-list">
+                <li class="empty">Nenhuma chamada registrada</li>
+            </ul>
+        </section>
+    </div>
+</div>
+
+<audio id="call-sound" preload="auto">
+    <source src="{{ url_for('static', filename='audio/call-notification.mp3') }}" type="audio/mpeg">
+</audio>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/operator.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        {% if selected_room %}
+        initializeOperator({{ selected_room.id }});
+        {% endif %}
+    });
+</script>
+{% endblock %}

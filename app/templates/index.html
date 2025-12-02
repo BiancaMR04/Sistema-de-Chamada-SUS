@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Sistema de Chamada SUS - Início{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="hero">
+        <h1>Sistema de Chamada SUS</h1>
+        <p>Sistema integrado ao e-SUS para gerenciamento de filas de atendimento</p>
+    </section>
+
+    <section class="features" aria-label="Funcionalidades">
+        <div class="feature-grid">
+            <article class="feature-card">
+                <h2>📺 Painéis de Chamada</h2>
+                <p>Visualize as chamadas em tempo real por sala/setor</p>
+                <div class="room-list">
+                    {% if rooms %}
+                        {% for room in rooms %}
+                        <a href="{{ url_for('main.display_panel', room_id=room.id) }}" 
+                           class="room-link" 
+                           aria-label="Abrir painel da {{ room.name }}">
+                            {{ room.name }} ({{ room.sector }})
+                        </a>
+                        {% endfor %}
+                    {% else %}
+                        <p class="no-rooms">Nenhuma sala cadastrada. <a href="{{ url_for('admin.rooms') }}">Cadastrar salas</a></p>
+                    {% endif %}
+                </div>
+            </article>
+
+            <article class="feature-card">
+                <h2>🏥 Recepção</h2>
+                <p>Adicione pacientes à fila de atendimento</p>
+                <a href="{{ url_for('main.reception') }}" class="btn btn-primary">
+                    Acessar Recepção
+                </a>
+            </article>
+
+            <article class="feature-card">
+                <h2>👩‍⚕️ Operador</h2>
+                <p>Chame pacientes e gerencie a fila</p>
+                <a href="{{ url_for('main.operator') }}" class="btn btn-primary">
+                    Acessar Operador
+                </a>
+            </article>
+
+            <article class="feature-card">
+                <h2>📊 Administração</h2>
+                <p>Gerencie salas, relatórios e configurações</p>
+                <a href="{{ url_for('admin.index') }}" class="btn btn-secondary">
+                    Acessar Admin
+                </a>
+            </article>
+        </div>
+    </section>
+
+    <section class="priorities-info" aria-label="Informações sobre prioridades">
+        <h2>Prioridades de Atendimento</h2>
+        <p>Conforme Lei Federal 10.048/2000:</p>
+        <ul class="priority-list">
+            <li class="priority-super">🔴 Idosos 80+ (Super Prioridade)</li>
+            <li class="priority-high">🟠 Pessoas com TEA (Autismo)</li>
+            <li class="priority-high">🟠 Pessoas com Deficiência</li>
+            <li class="priority-medium">🟡 Idosos 60+</li>
+            <li class="priority-medium">🟡 Gestantes</li>
+            <li class="priority-medium">🟡 Lactantes</li>
+            <li class="priority-low">🟢 Crianças com Responsável</li>
+            <li class="priority-normal">⚪ Atendimento Normal</li>
+        </ul>
+    </section>
+</div>
+{% endblock %}

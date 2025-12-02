@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Relatórios - Sistema de Chamada SUS{% endblock %}
+
+{% block content %}
+<div class="container">
+    <header class="page-header">
+        <h1>Relatórios</h1>
+        <a href="{{ url_for('admin.index') }}" class="btn btn-secondary">← Voltar</a>
+    </header>
+
+    <section class="report-filters" aria-label="Filtros de relatório">
+        <h2>Filtros</h2>
+        <form id="report-filters" class="filter-form">
+            <div class="form-group">
+                <label for="report-date">Data:</label>
+                <input type="date" id="report-date" name="date">
+            </div>
+            <div class="form-group">
+                <label for="report-room">Sala:</label>
+                <select id="report-room" name="room_id">
+                    <option value="">Todas as salas</option>
+                    {% for room in rooms %}
+                    <option value="{{ room.id }}">{{ room.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+        </form>
+    </section>
+
+    <section class="report-summary" id="report-summary" aria-label="Resumo do relatório">
+        <h2>Resumo Diário</h2>
+        <div class="summary-grid">
+            <div class="summary-card">
+                <span class="label">Total de Pacientes</span>
+                <span class="value" id="total-patients">-</span>
+            </div>
+            <div class="summary-card success">
+                <span class="label">Atendidos</span>
+                <span class="value" id="attended-count">-</span>
+            </div>
+            <div class="summary-card danger">
+                <span class="label">Ausentes</span>
+                <span class="value" id="absent-count">-</span>
+            </div>
+            <div class="summary-card warning">
+                <span class="label">Aguardando</span>
+                <span class="value" id="waiting-count">-</span>
+            </div>
+            <div class="summary-card info">
+                <span class="label">Tempo Médio de Espera</span>
+                <span class="value" id="avg-wait-time">-</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="priority-breakdown" aria-label="Divisão por prioridade">
+        <h2>Atendimentos por Prioridade</h2>
+        <div id="priority-chart" class="chart-container">
+            <ul id="priority-list" class="priority-breakdown-list">
+                <!-- Will be populated via JavaScript -->
+            </ul>
+        </div>
+    </section>
+
+    <section class="absence-report" aria-label="Relatório de ausências">
+        <h2>Relatório de Ausências</h2>
+        <div class="date-range-filter">
+            <label for="absence-start">De:</label>
+            <input type="date" id="absence-start" name="start_date">
+            <label for="absence-end">Até:</label>
+            <input type="date" id="absence-end" name="end_date">
+            <button type="button" id="load-absences" class="btn btn-secondary">Carregar</button>
+        </div>
+        <div id="absence-summary" class="absence-summary">
+            <p>Total de ausências: <strong id="total-absences">-</strong></p>
+        </div>
+    </section>
+
+    <section class="hourly-distribution" aria-label="Distribuição por hora">
+        <h2>Distribuição por Hora</h2>
+        <div id="hourly-chart" class="chart-container">
+            <!-- Will be populated via JavaScript -->
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/reports.js') }}"></script>
+{% endblock %}
