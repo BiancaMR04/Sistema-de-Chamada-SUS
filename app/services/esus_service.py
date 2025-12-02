@@ -26,7 +26,7 @@ class ESUSService:
     @staticmethod
     def _get_timeout() -> int:
         """Get API timeout from config (max 3 seconds as per requirements)."""
-        return min(current_app.config.get('ESUS_API_TIMEOUT', 3), 3)
+        return current_app.config.get('ESUS_API_TIMEOUT', 3)
     
     @staticmethod
     def search_patient(cpf: Optional[str] = None, cns: Optional[str] = None) -> Optional[dict]:

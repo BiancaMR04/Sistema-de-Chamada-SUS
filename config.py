@@ -2,9 +2,13 @@
 Configuration settings for Sistema de Chamada SUS.
 """
 import os
+import warnings
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# Maximum timeout for e-SUS API (in seconds)
+ESUS_MAX_TIMEOUT = 3
 
 
 class Config:
@@ -16,7 +20,7 @@ class Config:
     # e-SUS Integration
     ESUS_API_URL = os.environ.get('ESUS_API_URL', 'https://api.esus.gov.br')
     ESUS_API_KEY = os.environ.get('ESUS_API_KEY', '')
-    ESUS_API_TIMEOUT = int(os.environ.get('ESUS_API_TIMEOUT', 3))
+    ESUS_API_TIMEOUT = min(int(os.environ.get('ESUS_API_TIMEOUT', ESUS_MAX_TIMEOUT)), ESUS_MAX_TIMEOUT)
     
     # Audio settings
     AUDIO_ENABLED = os.environ.get('AUDIO_ENABLED', 'true').lower() == 'true'
@@ -30,6 +34,16 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     """Production configuration."""
     DEBUG = False
+    
+    def __init__(self):
+        """Validate production configuration."""
+        super().__init__()
+        if self.SECRET_KEY == 'dev-secret-key':
+            warnings.warn(
+                "WARNING: Using default SECRET_KEY in production. "
+                "Set SECRET_KEY environment variable for security.",
+                UserWarning
+            )
 
 
 class TestingConfig(Config):
