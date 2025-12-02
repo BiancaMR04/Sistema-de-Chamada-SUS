@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Recepção - Sistema de Chamada SUS{% endblock %}
+
+{% block content %}
+<div class="container">
+    <header class="page-header">
+        <h1>Recepção</h1>
+        <p>Adicione pacientes à fila de atendimento</p>
+    </header>
+
+    <section class="search-section" aria-label="Buscar paciente">
+        <h2>Buscar Paciente</h2>
+        <form id="search-form" class="search-form">
+            <div class="form-group">
+                <label for="search-cpf">CPF:</label>
+                <input type="text" 
+                       id="search-cpf" 
+                       name="cpf" 
+                       placeholder="000.000.000-00"
+                       pattern="\d{11}"
+                       maxlength="14"
+                       aria-describedby="cpf-help">
+                <small id="cpf-help" class="form-help">Digite apenas números ou com formatação</small>
+            </div>
+            <div class="form-group">
+                <label for="search-name">ou Nome:</label>
+                <input type="text" 
+                       id="search-name" 
+                       name="name" 
+                       placeholder="Nome do paciente"
+                       aria-describedby="name-help">
+                <small id="name-help" class="form-help">Mínimo 3 caracteres</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+
+        <div id="search-results" class="search-results" role="region" aria-label="Resultados da busca">
+            <!-- Results will be populated here -->
+        </div>
+    </section>
+
+    <section class="offline-section" aria-label="Cadastro offline">
+        <h2>Cadastro Manual (Modo Offline)</h2>
+        <form id="offline-form" class="patient-form">
+            <div class="form-group">
+                <label for="offline-name">Nome Completo: *</label>
+                <input type="text" 
+                       id="offline-name" 
+                       name="name" 
+                       required
+                       placeholder="Nome completo do paciente">
+            </div>
+            <div class="form-group">
+                <label for="offline-cpf">CPF:</label>
+                <input type="text" 
+                       id="offline-cpf" 
+                       name="cpf" 
+                       placeholder="000.000.000-00 (opcional)"
+                       maxlength="14">
+            </div>
+            <div class="form-group">
+                <label for="offline-birth">Data de Nascimento:</label>
+                <input type="date" 
+                       id="offline-birth" 
+                       name="birth_date">
+            </div>
+            <div class="form-group">
+                <label for="offline-priority">Prioridade:</label>
+                <select id="offline-priority" name="priority_type">
+                    <option value="NORMAL">Normal</option>
+                    <option value="CRIANCA">Criança com Responsável</option>
+                    <option value="LACTANTE">Lactante</option>
+                    <option value="GESTANTE">Gestante</option>
+                    <option value="IDOSO_60">Idoso (60+)</option>
+                    <option value="DEFICIENTE">Pessoa com Deficiência</option>
+                    <option value="AUTISTA">Pessoa com TEA</option>
+                    <option value="IDOSO_80">Idoso (80+)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-secondary">Cadastrar Paciente</button>
+        </form>
+    </section>
+
+    <section class="add-queue-section" aria-label="Adicionar à fila">
+        <h2>Adicionar à Fila</h2>
+        <form id="queue-form" class="queue-form">
+            <div class="form-group">
+                <label for="selected-patient">Paciente Selecionado:</label>
+                <input type="text" 
+                       id="selected-patient" 
+                       name="patient_display" 
+                       readonly
+                       placeholder="Selecione um paciente acima">
+                <input type="hidden" id="patient-id" name="patient_id">
+            </div>
+            <div class="form-group">
+                <label for="room-select">Sala/Setor: *</label>
+                <select id="room-select" name="room_id" required>
+                    <option value="">Selecione a sala</option>
+                    {% for room in rooms %}
+                    <option value="{{ room.id }}">{{ room.name }} ({{ room.sector }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="queue-priority">Prioridade:</label>
+                <select id="queue-priority" name="priority_type">
+                    <option value="">Usar prioridade do paciente</option>
+                    <option value="NORMAL">Normal</option>
+                    <option value="CRIANCA">Criança com Responsável</option>
+                    <option value="LACTANTE">Lactante</option>
+                    <option value="GESTANTE">Gestante</option>
+                    <option value="IDOSO_60">Idoso (60+)</option>
+                    <option value="DEFICIENTE">Pessoa com Deficiência</option>
+                    <option value="AUTISTA">Pessoa com TEA</option>
+                    <option value="IDOSO_80">Idoso (80+)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" id="add-queue-btn" disabled>
+                Adicionar à Fila
+            </button>
+        </form>
+
+        <div id="ticket-display" class="ticket-display" role="alert" hidden>
+            <h3>Senha Gerada</h3>
+            <div class="ticket-number" id="generated-ticket">---</div>
+            <div class="ticket-position">Posição na fila: <span id="ticket-position">-</span></div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/reception.js') }}"></script>
+{% endblock %}

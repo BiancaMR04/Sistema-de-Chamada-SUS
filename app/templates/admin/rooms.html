@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Salas - Sistema de Chamada SUS{% endblock %}
+
+{% block content %}
+<div class="container">
+    <header class="page-header">
+        <h1>Gerenciar Salas</h1>
+        <a href="{{ url_for('admin.index') }}" class="btn btn-secondary">← Voltar</a>
+    </header>
+
+    <section class="create-room" aria-label="Criar nova sala">
+        <h2>Nova Sala</h2>
+        <form id="room-form" class="form-inline">
+            <div class="form-group">
+                <label for="room-name">Nome da Sala:</label>
+                <input type="text" 
+                       id="room-name" 
+                       name="name" 
+                       required
+                       placeholder="Ex: Sala 1, Consultório A">
+            </div>
+            <div class="form-group">
+                <label for="room-sector">Setor:</label>
+                <input type="text" 
+                       id="room-sector" 
+                       name="sector" 
+                       required
+                       placeholder="Ex: Clínica Geral, Triagem">
+            </div>
+            <button type="submit" class="btn btn-primary">Criar Sala</button>
+        </form>
+    </section>
+
+    <section class="room-list" aria-label="Lista de salas">
+        <h2>Salas Cadastradas</h2>
+        <table class="data-table" id="rooms-table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Setor</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for room in rooms %}
+                <tr data-room-id="{{ room.id }}">
+                    <td>{{ room.id }}</td>
+                    <td>{{ room.name }}</td>
+                    <td>{{ room.sector }}</td>
+                    <td>
+                        <span class="status-badge {{ 'active' if room.is_active else 'inactive' }}">
+                            {{ 'Ativa' if room.is_active else 'Inativa' }}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-small btn-toggle" 
+                                data-room-id="{{ room.id }}"
+                                data-action="{{ 'deactivate' if room.is_active else 'activate' }}">
+                            {{ 'Desativar' if room.is_active else 'Ativar' }}
+                        </button>
+                        <a href="{{ url_for('main.display_panel', room_id=room.id) }}" 
+                           class="btn btn-small" 
+                           target="_blank">
+                            Ver Painel
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">Nenhuma sala cadastrada</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

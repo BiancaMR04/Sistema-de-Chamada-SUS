@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Painel de Chamada - {{ room.name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/panel.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="panel-container" data-room-id="{{ room.id }}" role="main" aria-live="polite">
+    <header class="panel-header">
+        <h1>{{ room.name }}</h1>
+        <span class="sector-badge">{{ room.sector }}</span>
+    </header>
+
+    <section class="current-call" aria-label="Chamada atual">
+        <div class="call-label">CHAMANDO</div>
+        <div id="current-ticket" class="ticket-number" aria-live="assertive">---</div>
+        <div id="current-name" class="patient-name" aria-live="assertive">Aguardando...</div>
+    </section>
+
+    <section class="last-calls" aria-label="Últimas chamadas">
+        <h2>Últimas Chamadas</h2>
+        <ul id="history-list" class="history-list" aria-live="polite">
+            <li class="history-item empty">Nenhuma chamada registrada</li>
+        </ul>
+    </section>
+
+    <section class="queue-info" aria-label="Informações da fila">
+        <div class="queue-count">
+            <span class="label">Na fila:</span>
+            <span id="waiting-count" class="count">0</span>
+        </div>
+        <div class="next-patients" id="next-patients">
+            <!-- Will be populated via JavaScript -->
+        </div>
+    </section>
+
+    <div class="audio-controls">
+        <button id="enable-audio" class="btn btn-audio" aria-label="Ativar som das chamadas">
+            🔊 Ativar Som
+        </button>
+    </div>
+</div>
+
+<audio id="call-sound" preload="auto">
+    <source src="{{ url_for('static', filename='audio/call-notification.wav') }}" type="audio/wav">
+</audio>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/panel.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const roomId = {{ room.id }};
+        initializePanel(roomId);
+    });
+</script>
+{% endblock %}
